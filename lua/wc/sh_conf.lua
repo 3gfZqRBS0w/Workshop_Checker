@@ -26,8 +26,7 @@ WC_CONFIG.LEVEL_OF_DANGEROUSNESS = {
     trustworthy = {
         color = Color(124,252,0),
         title = "trustworthy",
-        description "When the addon is used by many people and is well rated "
-
+        description = "When the addon is used by many people and is well rated "
     }
 
 }

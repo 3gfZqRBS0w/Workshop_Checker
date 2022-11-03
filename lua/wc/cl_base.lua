@@ -1,6 +1,4 @@
 
-
-
 local function Show()
 
     local addon = {}
@@ -33,9 +31,6 @@ local function Show()
     Check:AddOption("My Collection", function()
     List:SetVisible(true)
 
-        --net.Start("WORKSHOPCHECK_GetCollectionDetails")
-        --net.SendToServer()
-
     end):SetIcon("icon16/page_white_go.png")
     Check:AddOption("Other Collection", function()
 
@@ -43,16 +38,17 @@ local function Show()
 
     local Settings = Menu:AddMenu("Settings")
 
-    for k,v in pairs(WC_FUNC.GetAddonDetails()["response"]["publishedfiledetails"]) do
-        addon[k] = List:Add(WC_FUNC.GetAddonDetails()["response"]["publishedfiledetails"][k]["title"])
-        local button = addon[k]:Add( WC_FUNC.GetAddonDetails()["response"]["publishedfiledetails"][k]["description"] )
+
+    for k,v in pairs(WC_Response["response"]["publishedfiledetails"]) do
+        addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
+
+        
+        local button = addon[k]:Add( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
         addon[k]:SetExpanded( false )
-        --[[
-        local Description = vgui.Create( "DButton", addon[k] )
-        Description:SetPos( 0, 40 )
-        Description:Dock( FILL )
-        Description:DockMargin( 0, 100, 0, 0 )
-        Description:SetText( WC_FUNC.GetAddonDetails()["response"]["publishedfiledetails"][k]["description"] ) ]] 
+        addon[k]:SetMouseInputEnabled( true )  
+       
+
+
         addon[k].Paint = function(self, w, h)
             draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
         end
@@ -74,7 +70,17 @@ local function Show()
     end) ]]    
 end
 
-concommand.Add("workshopcheck", Show)
+concommand.Add("workshopcheck", function()
+    if (LocalPlayer():IsSuperAdmin()) then
+        if (istable(WC_Response)) then
+            Show()
+        else
+            print("démarrage impossible")
+        end
+    else
+        print("vous n'êtes pas suradmin")
+    end
+end)
 
 
 

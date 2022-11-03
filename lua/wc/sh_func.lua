@@ -1,10 +1,4 @@
 
-WC_FUNC = {}
-
-WC_FUNC.GetCollectionDetails = function()
-
-    --impossible to put it in local 
-
     HTTP({
         timeout = 60,
         url= "https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/",
@@ -20,55 +14,46 @@ WC_FUNC.GetCollectionDetails = function()
         headers = { 
             ['Content-Type']= 'application/json',
         },
-        success= function( code, body, headers )
-            WC_COLLEC = util.JSONToTable(body)
-
-        end, 
-        failed = function( err ) 
-            print("error " .. err)
-        end,
-    })
-
-    return WC_COLLEC
-end
-
-WC_FUNC.GetAddonParam = function()
-    local parameters = {}
-    local collec = WC_FUNC.GetCollectionDetails()["response"]["collectiondetails"][1]["children"]
-
-    for k, v in pairs(collec) do
-        parameters["publishedfileids["..(k-1).."]"] = v["publishedfileid"]
-        parameters["itemcount"] = util.TypeToString(k)
-    end
-
-    return parameters
-end
-
-
-WC_FUNC.GetAddonDetails = function()
-    HTTP({
-        timeout=60,
-        url= "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/", 
-        method= "POST",
-
-        headers= { 
-            ['Content-Type']= 'application/json'
-        },
-        parameters = WC_FUNC.GetAddonParam(),
-        
         success = function( code, body, headers )
-            
-            WC_ADDON = util.JSONToTable(body)
-          
+            local args = {}
+            local collec = util.JSONToTable(body)
+
+            for k, v in pairs(collec["response"]["collectiondetails"][1]["children"]) do
+                args["publishedfileids["..(k-1).."]"] = v["publishedfileid"]
+                args["itemcount"] = util.TypeToString(k)
+            end
+
+            HTTP({
+                timeout=60,
+                url= "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/", 
+                method= "POST",
+        
+                headers= { 
+                    ['Content-Type']= 'application/json'
+                },
+                parameters = args,
+                
+                success = function( code, body, headers )
+                    WC_Response = util.JSONToTable(body)
+                  
+                end, 
+                failed = function( err ) 
+                    print("error " .. err)  
+                end,
+              
+            })
         end, 
         failed = function( err ) 
             print("error " .. err)
         end,
-      
     })
-    return WC_ADDON
-end
---get the evaluation of an addon 
+
+
+
+
+
+
+
 
 
 --[[
@@ -107,24 +92,7 @@ description	=	Welcome to a night full of terror,
 
 ]]
 
-WC_FUNC.GetEvaluationOfAnAddon = function(addon)
 
-
-
-end
-
-
-
-
-
-WC_FUNC.GetNumberOfAddons = function(tb)
-    return table.Count(tb["response"]["collectiondetails"][1]["children"])
-end
-
-
-WC_FUNC.GetAddonNameByID = function(id)
-    return GetAddonData(id)["response"]["publishedfiledetails"][1]["title"]
-end
 
 
 
