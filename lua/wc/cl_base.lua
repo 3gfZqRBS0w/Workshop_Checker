@@ -1,4 +1,3 @@
-
 local function Show()
 
     local addon = {}
@@ -39,8 +38,14 @@ local function Show()
     for k,v in pairs(WC_Response["response"]["publishedfiledetails"]) do
 
         addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
-        local link = addon[k]:Add( "Link : https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
+        local analyse = addon[k]:Add( WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title .." : "..WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description)
+        local link = addon[k]:Add( "Click to show addon page" )
         local subscriptions = addon[k]:Add( "Subcriptions : "..WC_Response["response"]["publishedfiledetails"][k]["subscriptions"] )
+
+        analyse:SetTextColor(Color(255,255,255))
+        link:SetTextColor( Color(255,255,255) )
+        subscriptions:SetTextColor( Color(255,255,255) )
+
         addon[k]:SetExpanded( false )
         addon[k]:SetMouseInputEnabled( true )
         addon[k]:CopySelected()
@@ -49,6 +54,9 @@ local function Show()
         end
         link.DoClick = function()
             print( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
+
+
+            gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
         end
         
     end
@@ -68,6 +76,11 @@ local function Show()
         end
     end) ]]    
 end
+
+
+
+
+
 
 concommand.Add("workshopcheck", function()
     if (LocalPlayer():IsSuperAdmin()) then

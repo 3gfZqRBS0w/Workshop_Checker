@@ -11,3 +11,8 @@ La façon la plus simple pour prendre le contrôle d'un serveur garry's mod c'es
 The easiest way to take control of a garry's mod server is first of all to update an addon where it is subscribed. That's why I decided to write a small script to keep track of these updates directly.
 
 **For the moment the script is in development so a little patience.**
+
+
+image du développement ne correspond au résultat final  / The image of the development does not correspond to the final result 
+
+![Alt text](https://i.imgur.com/gm6JnHw.png "img")

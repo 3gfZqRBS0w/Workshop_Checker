@@ -1,55 +1,60 @@
 
     
     -- To get the addons from the collection
+
+
+    hook.Add( "InitPostEntity", "WC_REQUESTS", function()
+        HTTP({
+            timeout = 60,
+            url= "https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/",
+            headers= { 
+                ['Content-Type']= 'application/json',
+                ["Cache-Control"] = "max-age=0",
+            },
+            method= "POST",
+            parameters = {
+                ["collectioncount"] = "1",
+                ["publishedfileids[0]"] =  WL_WORKSHOP_ID
+            },
+            headers = { 
+                ['Content-Type']= 'application/json',
+            },
+            success = function( code, body, headers )
+                local args = {}
+                local collec = util.JSONToTable(body)
     
-    HTTP({
-        timeout = 60,
-        url= "https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/",
-        headers= { 
-            ['Content-Type']= 'application/json',
-            ["Cache-Control"] = "max-age=0",
-        },
-        method= "POST",
-        parameters = {
-            ["collectioncount"] = "1",
-            ["publishedfileids[0]"] =  WL_WORKSHOP_ID
-        },
-        headers = { 
-            ['Content-Type']= 'application/json',
-        },
-        success = function( code, body, headers )
-            local args = {}
-            local collec = util.JSONToTable(body)
-
-            for k, v in pairs(collec["response"]["collectiondetails"][1]["children"]) do
-                args["publishedfileids["..(k-1).."]"] = v["publishedfileid"]
-                args["itemcount"] = util.TypeToString(k)
-            end
-
-            HTTP({
-                timeout = 60,
-                url= "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/", 
-                method= "POST",
-        
-                headers= { 
-                    ['Content-Type']= 'application/json'
-                },
-                parameters = args,
-                
-                success = function( code, body, headers )
-                    WC_Response = util.JSONToTable(body)
+                for k, v in pairs(collec["response"]["collectiondetails"][1]["children"]) do
+                    args["publishedfileids["..(k-1).."]"] = v["publishedfileid"]
+                    args["itemcount"] = util.TypeToString(k)
+                end
+    
+                HTTP({
+                    timeout = 60,
+                    url= "https://api.steampowered.com/ISteamRemoteStorage/GetPublishedFileDetails/v1/", 
+                    method= "POST",
+            
+                    headers= { 
+                        ['Content-Type']= 'application/json'
+                    },
+                    parameters = args,
+                    
+                    success = function( code, body, headers )
+                        WC_Response = util.JSONToTable(body)
+                      
+                    end, 
+                    failed = function( err ) 
+                        print("error " .. err)  
+                    end,
                   
-                end, 
-                failed = function( err ) 
-                    print("error " .. err)  
-                end,
-              
-            })
-        end, 
-        failed = function( err ) 
-            print("error " .. err)
-        end,
-    })
+                })
+            end, 
+            failed = function( err ) 
+                print("error " .. err)
+            end,
+        })
+    end )
+    
+  
 
 
 
