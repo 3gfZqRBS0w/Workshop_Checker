@@ -32,26 +32,25 @@ local function Show()
     List:SetVisible(true)
 
     end):SetIcon("icon16/page_white_go.png")
-    Check:AddOption("Other Collection", function()
-
-    end):SetIcon("icon16/page_white_go.png")
 
     local Settings = Menu:AddMenu("Settings")
 
 
     for k,v in pairs(WC_Response["response"]["publishedfiledetails"]) do
+
         addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
-
-        
-        local button = addon[k]:Add( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
+        local link = addon[k]:Add( "Link : https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
+        local subscriptions = addon[k]:Add( "Subcriptions : "..WC_Response["response"]["publishedfiledetails"][k]["subscriptions"] )
         addon[k]:SetExpanded( false )
-        addon[k]:SetMouseInputEnabled( true )  
-       
-
-
+        addon[k]:SetMouseInputEnabled( true )
+        addon[k]:CopySelected()
         addon[k].Paint = function(self, w, h)
-            draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
+            draw.RoundedBox(0, 0, 0, w, h, WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
         end
+        link.DoClick = function()
+            print( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
+        end
+        
     end
 
 --[[

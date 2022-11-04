@@ -3,20 +3,26 @@
 
 WC_CONFIG = {}
 
-WL_WORKSHOP_ID = "1092793021"
+WL_WORKSHOP_ID = "2880893693"
 
 
 WC_CONFIG.LEVEL_OF_DANGEROUSNESS = {
+    
     backdoor = {
         color = Color(0,0,0),
         title = "Backdoor",
         description = "When the addon has been verified and contains or has contained a backdoor"
 
-    }, 
+    },
+    ban = {
+        color = Color(0,0,0),
+        title = "ban",
+        description = "ban"
+    },
     unsafe = {
         color = Color(100,0,0),
         title = "unsafe",
-        description = "update performed within 72 hours"
+        description = "either the add-on has been updated very recently or there is little traffic"
     }, 
     neutral = {
         color = Color(255,127,80),
@@ -24,9 +30,8 @@ WC_CONFIG.LEVEL_OF_DANGEROUSNESS = {
         description = "Nothing to say"
     }, 
     trustworthy = {
-        color = Color(124,252,0),
+        color = Color(0,128,0),
         title = "trustworthy",
         description = "When the addon is used by many people and is well rated "
     }
-
 }
