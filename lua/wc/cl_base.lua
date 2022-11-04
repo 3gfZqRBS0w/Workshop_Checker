@@ -6,9 +6,9 @@ local function Show()
     Main:SetSize(ScrW() / 2.5, ScrH() / 2.5)
     Main:SetTitle("Workshop Check")
     Main:SetVisible(true)
+    Main:ShowCloseButton( false )
     Main:Center()
     Main:SetDraggable(true)
-    Main:ShowCloseButton(true)
     Main:MakePopup()
     Main.Paint = function(self, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
@@ -18,6 +18,18 @@ local function Show()
     Menu:DockMargin(-3, -6, -3, 0)
     Menu.Paint = function(self, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
+    end
+
+    local CloseButton = vgui.Create("DButton", Main)
+    CloseButton:SetText( "" )
+    CloseButton:SetSize( 20, 20 )
+    CloseButton:SetPos( Main:GetWide()-20, 0 )
+    
+    CloseButton.Paint = function( self, w, h )
+        draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 0, 0, 255 ) )
+    end
+    CloseButton.DoClick = function()
+       Main:Close()
     end
 
     local List = vgui.Create( "DCategoryList", Main )
@@ -32,32 +44,40 @@ local function Show()
 
     end):SetIcon("icon16/page_white_go.png")
 
-    local Settings = Menu:AddMenu("Settings")
-
 
     for k,v in pairs(WC_Response["response"]["publishedfiledetails"]) do
+        if (WC_Response["response"]["publishedfiledetails"][k]["title"] == nil) then
+            addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
+            local link = addon[k]:Add( "no longer exists" )
 
-        addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
-        local analyse = addon[k]:Add( WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title .." : "..WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description)
-        local link = addon[k]:Add( "Click to show addon page" )
-        local subscriptions = addon[k]:Add( "Subcriptions : "..WC_Response["response"]["publishedfiledetails"][k]["subscriptions"] )
-
-        analyse:SetTextColor(Color(255,255,255))
-        link:SetTextColor( Color(255,255,255) )
-        subscriptions:SetTextColor( Color(255,255,255) )
-
-        addon[k]:SetExpanded( false )
-        addon[k]:SetMouseInputEnabled( true )
-        addon[k]:CopySelected()
-        addon[k].Paint = function(self, w, h)
-            draw.RoundedBox(0, 0, 0, w, h, WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
+            PrintTable(WC_Response["response"]["publishedfiledetails"][k])
+        else
+            addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
+            local analyse = addon[k]:Add( WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title .." : "..WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description)
+            local link = addon[k]:Add( "Click to show addon page" )
+            local subscriptions = addon[k]:Add( "Subcriptions : "..WC_Response["response"]["publishedfiledetails"][k]["subscriptions"] )
+    
+           analyse:SetTextColor(Color(255,255,255))
+           link:SetTextColor( Color(255,255,255) )
+           subscriptions:SetTextColor( Color(255,255,255) )
+    
+            addon[k]:SetExpanded( false )
+            addon[k]:SetMouseInputEnabled( true )
+            addon[k]:CopySelected()
+            addon[k].Paint = function(self, w, h)
+                draw.RoundedBox(0, 0, 0, w, h, WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
+            end
+            link.DoClick = function()
+                print( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
+    
+                print("le truc que je veux "..WC_Response["response"]["publishedfiledetails"][k]["creator"])
+    
+    
+                gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
+            end
         end
-        link.DoClick = function()
-            print( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
-
-
-            gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
-        end
+        
+       
         
     end
 

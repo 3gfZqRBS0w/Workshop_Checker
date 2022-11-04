@@ -9,6 +9,7 @@ print([[
 ]])
 
 
+if (string.len(GetConVar("host_workshop_collection"):GetString()) ~= 0) then
 if (SERVER) then
     for k, v in pairs(file) do
         if (string.StartWith(v, "sv") and string.EndsWith(v, ".lua")) then
@@ -26,4 +27,8 @@ else
 			include(rep..v)
 		end
 	end
+end
+
+else
+	print("[WC] Unable to start: the collection is not defined")
 end
