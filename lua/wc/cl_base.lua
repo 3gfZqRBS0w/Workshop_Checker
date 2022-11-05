@@ -49,17 +49,17 @@ local function Show()
         if (WC_Response["response"]["publishedfiledetails"][k]["title"] == nil) then
             addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
             local link = addon[k]:Add( "no longer exists" )
-
-            PrintTable(WC_Response["response"]["publishedfiledetails"][k])
         else
             addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
             local analyse = addon[k]:Add( WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title .." : "..WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description)
             local link = addon[k]:Add( "Click to show addon page" )
             local subscriptions = addon[k]:Add( "Subcriptions : "..WC_Response["response"]["publishedfiledetails"][k]["subscriptions"] )
+            local downloadlink = addon[k]:Add( "...Download GMA...")
     
            analyse:SetTextColor(Color(255,255,255))
            link:SetTextColor( Color(255,255,255) )
            subscriptions:SetTextColor( Color(255,255,255) )
+           downloadlink:SetTextColor( Color(255,255,255) )
     
             addon[k]:SetExpanded( false )
             addon[k]:SetMouseInputEnabled( true )
@@ -67,12 +67,15 @@ local function Show()
             addon[k].Paint = function(self, w, h)
                 draw.RoundedBox(0, 0, 0, w, h, WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
             end
+
+
+            downloadlink.DoClick = function()
+                PrintTable(WC_Response["response"]["publishedfiledetails"][k])
+                print(WC_Response["response"]["publishedfiledetails"][k]["file_url"])
+                gui.OpenURL(WC_Response["response"]["publishedfiledetails"][k]["file_url"])
+            end
+
             link.DoClick = function()
-                print( "https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"] )
-    
-                print("le truc que je veux "..WC_Response["response"]["publishedfiledetails"][k]["creator"])
-    
-    
                 gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
             end
         end
@@ -101,17 +104,26 @@ end
 
 
 
+concommand.Add("workshopcheck", function(pl, cmd, args)
 
-concommand.Add("workshopcheck", function()
-    if (LocalPlayer():IsSuperAdmin()) then
-        if (istable(WC_Response)) then
-            Show()
+    if (WC_Response ~= nil) then
+        if ( pl:IsSuperAdmin() ) then 
+            Show(WC_Response)
         else
-            print("démarrage impossible")
+            print("You do not have the right !")
         end
-    else
-        print("vous n'êtes pas suradmin")
+    else  
+    net.Start("WC_GetAddons")
+    net.SendToServer()
     end
+end)
+
+net.Receive("WC_GetAddons", function()
+    local bytes_amount = net.ReadUInt( 16 ) 
+	local compressed_message = net.ReadData( bytes_amount ) 
+	WC_Response = util.JSONToTable(util.Decompress( compressed_message ))
+
+    Show(WC_Response)
 end)
 
 

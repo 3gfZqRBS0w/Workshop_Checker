@@ -1,7 +1,7 @@
 
-    
+
     -- To get the addons from the collection
-    hook.Add( "PlayerConnect", "WC_REQUESTS", function()
+hook.Add( "PlayerConnect", "WC_REQUESTS", function()
         HTTP({
             timeout = 60,
             url= "https://api.steampowered.com/ISteamRemoteStorage/GetCollectionDetails/v1/",
@@ -12,7 +12,7 @@
             method= "POST",
             parameters = {
                 ["collectioncount"] = "1",
-                ["publishedfileids[0]"] =  GetConVar("host_workshop_collection"):GetString()
+                ["publishedfileids[0]"] =  GetConVar("workshopID"):GetString()
             },
             headers = { 
                 ['Content-Type']= 'application/json',
@@ -38,7 +38,7 @@
                     
                     success = function( code, body, headers )
                         WC_Response = util.JSONToTable(body)
-                      
+                        hook.Call("WC_AfterRequestAddon")
                     end, 
                     failed = function( err ) 
                         print("error " .. err)  
@@ -52,13 +52,16 @@
         })
 
         hook.Remove("PlayerConnect", "WC_REQUESTS")
-    end )
+    end)
 
-    if (CLIENT) then
-        hook.Run( "PlayerConnect", "WC_REQUESTS")
-    end
+ 
+
+
     
-  
+
+
+    
+
 
 
 

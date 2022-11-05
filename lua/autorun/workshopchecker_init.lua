@@ -9,8 +9,10 @@ print([[
 ]])
 
 
-if (string.len(GetConVar("host_workshop_collection"):GetString()) ~= 0) then
+CreateConVar("workshopID", GetConVar("host_workshop_collection"):GetString(), FCVAR_REPLICATED, "workshop collection")
+
 if (SERVER) then
+	
     for k, v in pairs(file) do
         if (string.StartWith(v, "sv") and string.EndsWith(v, ".lua")) then
             include(rep..v)
@@ -29,6 +31,4 @@ else
 	end
 end
 
-else
-	print("[WC] Unable to start: the collection is not defined")
-end
+
