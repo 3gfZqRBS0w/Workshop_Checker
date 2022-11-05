@@ -2,6 +2,10 @@ WorkshopCheck = {}
 
 function WorkshopCheck.GetValidation(addon)
 
+    if (WC_ADDON_BACKDOOR[addon["publishedfileid"]] == true) then
+        return WC_CONFIG.LEVEL_OF_DANGEROUSNESS.backdoor
+    end
+ 
     if (WC_ADDON_EXPLOIT[addon["publishedfileid"]] == true) then
         return WC_CONFIG.LEVEL_OF_DANGEROUSNESS.exploit
     end

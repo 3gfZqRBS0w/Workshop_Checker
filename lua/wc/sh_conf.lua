@@ -30,7 +30,7 @@ WC_ADDON_EXPLOIT = {
 }
 
 WC_ADDON_BACKDOOR = {
-    
+    ["2691170063"] = true
 }
 
 
@@ -54,6 +54,11 @@ WC_CONFIG.LEVEL_OF_DANGEROUSNESS = {
         description = "When the addon has been verified and contains or has contained a backdoor"
 
     },
+    deleted = {
+        color = Color(6, 32, 39),
+        title = "Removed",
+        description = "Addon removed or hidden from workshop containing malicious potential", 
+    }, 
     ban = {
         color = Color(0,0,0),
         title = "ban",
