@@ -105,16 +105,19 @@ end
 
 
 concommand.Add("workshopcheck", function(pl, cmd, args)
-
-    if (WC_Response ~= nil) then
-        if ( pl:IsSuperAdmin() ) then 
-            Show(WC_Response)
-        else
-            print("You do not have the right !")
+    if (WC_ACCESS[pl:GetUserGroup()] == true) then
+        if (WC_Response ~= nil) then
+            if ( pl:IsSuperAdmin() ) then 
+                Show(WC_Response)
+            else
+                print("You do not have the right !")
+            end
+        else  
+        net.Start("WC_GetAddons")
+        net.SendToServer()
         end
-    else  
-    net.Start("WC_GetAddons")
-    net.SendToServer()
+    else
+        print("[WC] You are not allowed to")
     end
 end)
 

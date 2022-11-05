@@ -12,7 +12,7 @@ hook.Add( "PlayerConnect", "WC_REQUESTS", function()
             method= "POST",
             parameters = {
                 ["collectioncount"] = "1",
-                ["publishedfileids[0]"] =  GetConVar("workshopID"):GetString()
+                ["publishedfileids[0]"] =  GetConVar("host_workshop_collection"):GetString()
             },
             headers = { 
                 ['Content-Type']= 'application/json',

@@ -8,6 +8,12 @@ WC_CONFIG = {}
 
 
 
+WC_ACCESS = {
+    ["superadmin"] = true
+}
+
+
+
 
 
 
@@ -21,6 +27,10 @@ WC_ADDON_EXPLOIT = {
         Possibility to exploit a net to make crash and take screens of other players without this one being beforehand superadmin. 
     ]]
     ["2114254167"] = true, 
+}
+
+WC_ADDON_BACKDOOR = {
+    
 }
 
 
