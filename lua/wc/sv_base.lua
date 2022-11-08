@@ -1,6 +1,7 @@
 util.AddNetworkString("WC_GetAddons")
 util.AddNetworkString("WC_ResearchAddon")
 
+
 if (not file.Exists("data/workshopcheck", "GAME")) then
     file.CreateDir("workshopcheck")
     print("[WC] file created")
@@ -31,6 +32,7 @@ net.Receive(
         end
     end
 )
+
 
 net.Receive(
     "WC_GetAddons",
@@ -134,6 +136,12 @@ hook.Add(
         end
     end
 )
+
+
+
+
+
+
 
 --[[
 bad idea

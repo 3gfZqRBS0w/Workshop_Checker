@@ -1,9 +1,5 @@
 -- CONFIGURATION FILE
 
-
-
-
-
 WC_CONFIG = {}
 
 

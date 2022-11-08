@@ -1,12 +1,16 @@
-local function Show()
 
+
+
+--GetFilesFromWorkshop(634106326)
+
+local function Show()
     local addon = {}
     local Main = vgui.Create("DFrame")
     Main:SetPos(5, 5)
     Main:SetSize(ScrW() / 2.5, ScrH() / 2.5)
     Main:SetTitle("Workshop Check")
     Main:SetVisible(true)
-    Main:ShowCloseButton( false )
+    Main:ShowCloseButton(false)
     Main:Center()
     Main:SetDraggable(false)
     Main:MakePopup()
@@ -21,94 +25,158 @@ local function Show()
     end
 
     local CloseButton = vgui.Create("DButton", Main)
-    CloseButton:SetText( "" )
-    CloseButton:SetSize( 20, 20 )
-    CloseButton:SetPos( Main:GetWide()-20, 0 )
-    
-    CloseButton.Paint = function( self, w, h )
-        draw.RoundedBox( 0, 0, 0, w, h, Color( 255, 0, 0, 255 ) )
+    CloseButton:SetText("")
+    CloseButton:SetSize(20, 20)
+    CloseButton:SetPos(Main:GetWide() - 20, 0)
+
+    CloseButton.Paint = function(self, w, h)
+        draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
     end
     CloseButton.DoClick = function()
-       Main:Close()
+        Main:Close()
     end
 
-    local List = vgui.Create( "DCategoryList", Main )
+    local List = vgui.Create("DCategoryList", Main)
     List:SetVisible(false)
     List:Dock(FILL)
     List:UnselectAll()
 
-
     local Check = Menu:AddMenu("Check")
-    Check:AddOption("My Collection", function()
-    List:SetVisible(not List:IsVisible())
+    Check:AddOption(
+        "My Collection",
+        function()
+            List:SetVisible(not List:IsVisible())
+        end
+    ):SetIcon("icon16/page_white_go.png")
 
-    end):SetIcon("icon16/page_white_go.png")
-
-
-    for k,v in pairs(WC_Response["response"]["publishedfiledetails"]) do
+    for k, v in pairs(WC_Response["response"]["publishedfiledetails"]) do
         if (WC_Response["response"]["publishedfiledetails"][k]["title"] == nil) then
-
+            --addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
+            --  local link = addon[k]:Add( "no longer exists" )
             net.Start("WC_ResearchAddon")
             net.WriteString(WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
             net.SendToServer()
 
-            net.Receive("WC_ResearchAddon", function()
-                local bytes_amount = net.ReadUInt( 16 ) 
-                local compressed_message = net.ReadData( bytes_amount ) 
-                WC_Response["response"]["publishedfiledetails"][k] = util.JSONToTable(util.Decompress( compressed_message ))
-                addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
-                local analyse = addon[k]:Add( WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title .." : "..WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description)
-                local deleted = addon[k]:Add("addon deleted or hidden. Remove it from the collection !  ")
+            net.Receive(
+                "WC_ResearchAddon",
+                function()
+                    local bytes_amount = net.ReadUInt(16)
+                    local compressed_message = net.ReadData(bytes_amount)
+                    WC_Response["response"]["publishedfiledetails"][k] =
+                        util.JSONToTable(util.Decompress(compressed_message))
+                    addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
+                    local analyse =
+                        addon[k]:Add(
+                        WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title ..
+                            " : " ..
+                                WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description
+                    )
 
-                analyse:SetTextColor(Color(255,255,255))
-                deleted:SetTextColor(Color(255,255,255))
+                    local deleted = addon[k]:Add("addon deleted or hidden. Remove it from the collection !  ")
 
-                addon[k].Paint = function(self, w, h)
-                    draw.RoundedBox(0, 0, 0, w, h, WC_CONFIG.LEVEL_OF_DANGEROUSNESS.deleted.color)
+                    analyse:SetTextColor(Color(255, 255, 255))
+
+                    deleted:SetTextColor(Color(255, 255, 255))
+
+                    addon[k].Paint = function(self, w, h)
+                        draw.RoundedBox(0, 0, 0, w, h, WC_CONFIG.LEVEL_OF_DANGEROUSNESS.deleted.color)
+                    end
                 end
-
-                
-
-
-            end)
-            --addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
-          --  local link = addon[k]:Add( "no longer exists" )
+            )
         else
             addon[k] = List:Add(WC_Response["response"]["publishedfiledetails"][k]["title"])
-            local analyse = addon[k]:Add( WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title .." : "..WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description)
-            local link = addon[k]:Add( "Click to show addon page" )
-            local subscriptions = addon[k]:Add( "Subcriptions : "..WC_Response["response"]["publishedfiledetails"][k]["subscriptions"] )
-            local downloadlink = addon[k]:Add( "...Download GMA...")
-
-            addon[k].Paint = function(self, w, h)
-                draw.RoundedBox(0, 0, 0, w, h, WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
+            local check = addon[k]:Add("Show all files")
+            local analyse =
+                addon[k]:Add(
+                WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).title ..
+                    " : " .. WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).description
+            )
+            local link = addon[k]:Add("Click to show addon page")
+            local subscriptions =
+                addon[k]:Add("Subcriptions : " .. WC_Response["response"]["publishedfiledetails"][k]["subscriptions"])
+            if (WC_Response["response"]["publishedfiledetails"][k]["file_url"] ~= "") then
+                local downloadlink = addon[k]:Add("...Download GMA...")
+                downloadlink:SetTextColor(Color(255, 255, 255))
+                downloadlink.DoClick = function()
+                    gui.OpenURL(WC_Response["response"]["publishedfiledetails"][k]["file_url"])
+                end
             end
-    
-           analyse:SetTextColor(Color(255,255,255))
-           link:SetTextColor( Color(255,255,255) )
-           subscriptions:SetTextColor( Color(255,255,255) )
-           downloadlink:SetTextColor( Color(255,255,255) )
-    
-            addon[k]:SetExpanded( false )
-            addon[k]:SetMouseInputEnabled( true )
+            addon[k].Paint = function(self, w, h)
+                draw.RoundedBox(
+                    0,
+                    0,
+                    0,
+                    w,
+                    h,
+                    WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color
+                )
+            end
+
+            analyse:SetTextColor(Color(255, 255, 255))
+            link:SetTextColor(Color(255, 255, 255))
+            check:SetTextColor(Color(255, 255, 255))
+            subscriptions:SetTextColor(Color(255, 255, 255))
+
+            addon[k]:SetExpanded(false)
+            addon[k]:SetMouseInputEnabled(true)
             addon[k]:CopySelected()
             addon[k].Paint = function(self, w, h)
-                draw.RoundedBox(0, 0, 0, w, h, WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
-            end
-
-
-            downloadlink.DoClick = function()
-                print(WC_Response["response"]["publishedfiledetails"][k]["file_url"])
-                gui.OpenURL(WC_Response["response"]["publishedfiledetails"][k]["file_url"])
+                draw.RoundedBox(
+                    0,
+                    0,
+                    0,
+                    w,
+                    h,
+                    WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color
+                )
             end
 
             link.DoClick = function()
-                gui.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id="..WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"])
+                gui.OpenURL(
+                    "https://steamcommunity.com/sharedfiles/filedetails/?id=" ..
+                        WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"]
+                )
+            end
+
+            check.DoClick = function()
+                local Nav = vgui.Create("DFrame")
+                Nav:SetSize(500, 250)
+                Nav:SetSizable(true)
+                Nav:Center()
+                Nav:MakePopup()
+                Nav:SetTitle("Addon verification")
+
+                local browser = vgui.Create("DFileBrowser", Nav)
+
+                local dtree = vgui.Create("DTree", Nav)
+                dtree:Dock(FILL)
+
+                local node = dtree:AddNode("ALL FILES")
+                steamworks.DownloadUGC( WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"], function( path )
+                    local success, files = game.MountGMA(path)
+                    if (success) then
+                        for k, v in pairs(
+                            files
+                        ) do
+                            print(v)
+                            node:AddNode(v)
+                        end
+                    end
+                end)
+
+                Nav.Paint = function(self, w, h)
+                    draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
+                end
+
+                function browser:OnSelect(path, pnl) -- Called when a file is clicked
+                    RunConsoleCommand("gm_spawn", path) -- Spawn the model we clicked
+                    Nav:Close()
+                end
             end
         end
     end
 
---[[
+    --[[
     net.Receive("WORKSHOPCHECK_GetCollectionDetails", function(len, pl)
         local num = net.ReadUInt(9)
         for I=1, num do
@@ -121,37 +189,42 @@ local function Show()
                 draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
             end
         end
-    end) ]]    
+    end) ]]
 end
 
-
-
-
-
-concommand.Add("workshopcheck", function(pl, cmd, args)
-    if (WC_ACCESS[pl:GetUserGroup()] == true) then
-        if (WC_Response ~= nil) then
-            if ( pl:IsSuperAdmin() ) then 
-                Show(WC_Response)
+--[[
+    steamworks.DownloadUGC( 104548572, function( path )
+	a, b = game.MountGMA( path )
+    PrintTable(b)
+end)
+]]
+concommand.Add(
+    "workshopcheck",
+    function(pl, cmd, args)
+        if (WC_ACCESS[pl:GetUserGroup()] == true) then
+            if (WC_Response ~= nil) then
+                if (pl:IsSuperAdmin()) then
+                    Show(WC_Response)
+                else
+                    print("You do not have the right !")
+                end
             else
-                print("You do not have the right !")
+                net.Start("WC_GetAddons")
+                net.SendToServer()
             end
-        else  
-        net.Start("WC_GetAddons")
-        net.SendToServer()
+        else
+            print("[WC] You are not allowed to")
         end
-    else
-        print("[WC] You are not allowed to")
     end
-end)
+)
 
-net.Receive("WC_GetAddons", function()
-    local bytes_amount = net.ReadUInt( 16 ) 
-	local compressed_message = net.ReadData( bytes_amount ) 
-	WC_Response = util.JSONToTable(util.Decompress( compressed_message ))
+net.Receive(
+    "WC_GetAddons",
+    function()
+        local bytes_amount = net.ReadUInt(16)
+        local compressed_message = net.ReadData(bytes_amount)
+        WC_Response = util.JSONToTable(util.Decompress(compressed_message))
 
-    Show(WC_Response)
-end)
-
-
-
+        Show(WC_Response)
+    end
+)
