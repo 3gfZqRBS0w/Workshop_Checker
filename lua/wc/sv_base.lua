@@ -1,3 +1,6 @@
+
+
+
 util.AddNetworkString("WC_GetAddons")
 util.AddNetworkString("WC_ResearchAddon")
 

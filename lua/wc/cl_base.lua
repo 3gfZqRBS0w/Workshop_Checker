@@ -1,10 +1,11 @@
+-- Il faut parcourir verticalement pour récupérer les différents niveau de noeud
 
-
-
---GetFilesFromWorkshop(634106326)
 
 local function Show()
+
     local addon = {}
+
+
     local Main = vgui.Create("DFrame")
     Main:SetPos(5, 5)
     Main:SetSize(ScrW() / 2.5, ScrH() / 2.5)
@@ -12,7 +13,7 @@ local function Show()
     Main:SetVisible(true)
     Main:ShowCloseButton(false)
     Main:Center()
-    Main:SetDraggable(false)
+    Main:SetDraggable(true)
     Main:MakePopup()
     Main.Paint = function(self, w, h)
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
@@ -33,6 +34,7 @@ local function Show()
         draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
     end
     CloseButton.DoClick = function()
+
         Main:Close()
     end
 
@@ -121,14 +123,7 @@ local function Show()
             addon[k]:SetMouseInputEnabled(true)
             addon[k]:CopySelected()
             addon[k].Paint = function(self, w, h)
-                draw.RoundedBox(
-                    0,
-                    0,
-                    0,
-                    w,
-                    h,
-                    WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color
-                )
+                draw.RoundedBox(0,0,0,w,h,WorkshopCheck.GetValidation(WC_Response["response"]["publishedfiledetails"][k]).color)
             end
 
             link.DoClick = function()
@@ -139,38 +134,114 @@ local function Show()
             end
 
             check.DoClick = function()
+
+                local nodes = {}
                 local Nav = vgui.Create("DFrame")
+                Nav:ShowCloseButton(false)
                 Nav:SetSize(500, 250)
                 Nav:SetSizable(true)
                 Nav:Center()
                 Nav:MakePopup()
                 Nav:SetTitle("Addon verification")
-
-                local browser = vgui.Create("DFileBrowser", Nav)
+                local CloseButton = vgui.Create("DButton", Nav)
+                CloseButton:SetText("")
+                CloseButton:SetSize(20, 20)
+                CloseButton:SetPos(Nav:GetWide() - 20, 0)
+                CloseButton.Paint = function(self, w, h)
+                    draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
+                end
+                CloseButton.DoClick = function()
+                    Nav:Close()
+                end
 
                 local dtree = vgui.Create("DTree", Nav)
                 dtree:Dock(FILL)
 
-                local node = dtree:AddNode("ALL FILES")
+                local arbo = dtree:AddNode("/")
+
+
+
                 steamworks.DownloadUGC( WC_Response["response"]["publishedfiledetails"][k]["publishedfileid"], function( path )
                     local success, files = game.MountGMA(path)
+                    local pathsNode = {}
                     if (success) then
-                        for k, v in pairs(
-                            files
-                        ) do
-                            print(v)
-                            node:AddNode(v)
+
+                        for k, v in pairs(files) do
+                            pathsNode[k] = arbo:AddNode(v, "icon16/link.png")
+
+                            pathsNode[k].DoClick = function()
+                                if (string.GetExtensionFromFilename(v) == "lua") then
+
+
+                                    local CodeWindow = vgui.Create( "DFrame" )
+                                    CodeWindow:SetSize( ScrW() / 2.5, ScrH() / 2.5 )
+                                    CodeWindow:ShowCloseButton(false)
+                                    CodeWindow:Center()
+                                    CodeWindow:MakePopup()
+                                    CodeWindow.Paint = function(self, w, h)
+                                        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
+                                    end
+
+                                    local Code = vgui.Create( "DTextEntry", CodeWindow )
+                                    Code:SetMultiline( true )
+
+                                    Code:Dock( FILL )
+                                    Code:SetText( file.Read( v, "GAME" )  )
+
+                                    local CloseButton = vgui.Create("DButton", CodeWindow)
+                                    CloseButton:SetText("")
+                                    CloseButton:SetSize(20, 20)
+                                    CloseButton:SetPos(Main:GetWide() - 20, 0)
+                                
+                                    CloseButton.Paint = function(self, w, h)
+                                        draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
+                                    end
+                                    CloseButton.DoClick = function()
+                                
+                                        CodeWindow:Close()
+                                    end
+                            
+
+                                end
+                            end    
                         end
+
+
+                        --[[
+                            we'll see later
+
+                        paths = {
+                            "a/b",
+                            "a/c",
+                            "d/e/f",
+                        }
+                        local notfound = true
+
+                        for pathLevel, path in pairs(paths) do
+                            for nodeLevel, nodeName in pairs(string.Explode("/", path)) do
+                                if (nodeLevel == 1 and pathLevel == 1) then
+                                    actualNode = arbo:AddNode(nodeName)
+                                else
+                                    for k, v in pairs(arbo:GetChildNodes()) do
+                                        if (v:GetText() == string.Explode("/", path)[nodeLevel-1] ) then
+                                            actualNode = v:AddNode(nodeName)
+                                            notfound = false
+                                            break
+                                        end
+                                    end
+                                    if (notfound) then
+                                        actualNode = arbo:AddNode(nodeName)
+                                        notfound = false
+                                    end                     
+                                end
+                            end
+                        end
+                        ]]
                     end
                 end)
 
                 Nav.Paint = function(self, w, h)
                     draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
-                end
-
-                function browser:OnSelect(path, pnl) -- Called when a file is clicked
-                    RunConsoleCommand("gm_spawn", path) -- Spawn the model we clicked
-                    Nav:Close()
                 end
             end
         end
@@ -224,7 +295,6 @@ net.Receive(
         local bytes_amount = net.ReadUInt(16)
         local compressed_message = net.ReadData(bytes_amount)
         WC_Response = util.JSONToTable(util.Decompress(compressed_message))
-
         Show(WC_Response)
     end
 )
