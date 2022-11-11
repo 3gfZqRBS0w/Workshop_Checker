@@ -8,20 +8,19 @@ Workshop Checker est une add-on Garry's Mod qui permet de vérifier le contenu d
 
 ###Objectif :
 
-[~] Fournit une analyse pour déterminer la confiance de l'add-on
-[x] Préviens lorsqu'un add-on de la collection vient d'être mis a jour
-[x] Garde en mémoire les add-ons suspects et préviens lorsqu'il ont été soit supprimé soit masqué
-[x] Permet de visualiser directement en jeu les addons de la collection en jeu en fournissant certain détail
-[x] Permet dans certain cas de fournir un lien de téléchargement pour l'add-on
-[~] Permet de visualiser directement en jeu le code LUA et VMT , les fichiers audios et les textures.
-[ ] Interface propre et intuitive 
-[ ] Utilise une API mis a jour régulièrement permettant de lister les addons connu contenant soit une backdoor ou un exploit.
-[ ] Analyse automatique appronfondie de l'add-on
+- [~] Fournit une analyse pour déterminer la confiance de l'add-on
+- [x] Préviens lorsqu'un add-on de la collection vient d'être mis a jour
+- [x] Garde en mémoire les add-ons suspects et préviens lorsqu'il ont été soit supprimé soit masqué
+- [x] Permet de visualiser directement en jeu les addons de la collection en jeu en fournissant certain détail
+- [x] Permet dans certain cas de fournir un lien de téléchargement pour l'add-on
+- [~] Permet de visualiser directement en jeu le code LUA et VMT , les fichiers audios et les textures.
+- [ ] Interface propre et intuitive 
+- [ ] Utilise une API mis a jour régulièrement permettant de lister les addons connu contenant soit une backdoor ou un exploit.
+- [ ] Analyse automatique appronfondie de l'add-on
 
 **Légende :**
-[x] : Terminé
-[~] : Partiellement terminé
-[ ] : Non commencé
+- [x] : Terminé
+- [ ] : Non commencé ou Partiellement terminé 
 
 ### Installation :
 
@@ -39,20 +38,19 @@ Workshop Checker is a Garry's Mod add-on that allows to check the content of the
 
 ###Purpose:
 
-[~] Provide an analysis to determine the trust of the add-on
-[x] Warn when an add-on in the collection has been updated
-[x] Keeps track of suspicious add-ons and warns when they have been either deleted or hidden
-[x] Allows to visualize directly in game the add-ons of the collection in game by providing some details
-[x] Allows in some cases to provide a download link for the add-on
-[~] Allows to visualize directly in game the LUA and VMT code, the audio files and the textures.
-[ ] Clean and intuitive interface 
-[ ] Uses a regularly updated API to list known addons containing either a backdoor or an exploit.
-[ ] Advanced automatic analysis of the add-on
+- [ ] Provide an analysis to determine the trust of the add-on
+- [x] Warn when an add-on in the collection has been updated
+- [x] Keeps track of suspicious add-ons and warns when they have been either deleted or hidden
+- [x] Allows to visualize directly in game the add-ons of the collection in game by providing some details
+- [x] Allows in some cases to provide a download link for the add-on
+- [ ] Allows to visualize directly in game the LUA and VMT code, the audio files and the textures.
+- [ ] Clean and intuitive interface 
+- [ ] Uses a regularly updated API to list known addons containing either a backdoor or an exploit.
+- [ ] Advanced automatic analysis of the add-on
 
 **Legend:**
-[x] : Completed
-[~] : Partially finished
-[ ] : Not started
+- [x] : Completed
+- [ ] : Not started or Partially finished
 
 ### Installation:
 
