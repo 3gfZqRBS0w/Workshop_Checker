@@ -1,18 +1,84 @@
 # WORKSHOP CHECKER
 
-## En Français 
+## En Français
 
-La façon la plus simple pour prendre le contrôle d'un serveur garry's mod c'est avant tout de mettre à jour un addon où celui-ci est abonné. C'est pourquoi j'ai décidé d'écrire un petit script permettant de se tenir au courant de ces mises à jour directement.
+Workshop Checker est une add-on Garry's Mod qui permet de vérifier le contenu de la collection du serveurs où il est installée. Les backdoors et exploits sont courants sur cette plateforme c'est pourquoi j'ai écrit ce script pour prévenir toutes attaques avant qu'elle n'est lieu par l'utilisation de différents critères de confiance telle que la date de la mises à jour ou son audience.
 
 **Pour l'instant le script est en développement donc un peu de patience.**
 
+###Objectif :
+
+[~] Fournit une analyse pour déterminer la confiance de l'add-on
+[x] Préviens lorsqu'un add-on de la collection vient d'être mis a jour
+[x] Garde en mémoire les add-ons suspects et préviens lorsqu'il ont été soit supprimé soit masqué
+[x] Permet de visualiser directement en jeu les addons de la collection en jeu en fournissant certain détail
+[x] Permet dans certain cas de fournir un lien de téléchargement pour l'add-on
+[~] Permet de visualiser directement en jeu le code LUA et VMT , les fichiers audios et les textures.
+[ ] Interface propre et intuitive 
+[ ] Utilise une API mis a jour régulièrement permettant de lister les addons connu contenant soit une backdoor ou un exploit.
+[ ] Analyse automatique appronfondie de l'add-on
+
+**Légende :**
+[x] : Terminé
+[~] : Partiellement terminé
+[ ] : Non commencé
+
+### Installation :
+
+Attention : l'add-on n'est pas terminée !
+
+Tout comme chaque add-on, il suffit d'extraire et de déplacer le dossier dans garrysmod/addons et le tour est joué. C'est aussi simple que ça
+
+---
+ 
 ## In English
 
-The easiest way to take control of a garry's mod server is first of all to update an addon where it is subscribed. That's why I decided to write a small script to keep track of these updates directly.
+Workshop Checker is a Garry's Mod add-on that allows to check the content of the collection of the server where it is installed. Backdoors and exploits are common on this platform that's why I wrote this script to prevent any attack before it happens by using different trust criteria such as the date of the update or its audience.
 
 **For the moment the script is in development so a little patience.**
 
+###Purpose:
 
-image du développement ne correspond au résultat final  / The image of the development does not correspond to the final result 
+[~] Provide an analysis to determine the trust of the add-on
+[x] Warn when an add-on in the collection has been updated
+[x] Keeps track of suspicious add-ons and warns when they have been either deleted or hidden
+[x] Allows to visualize directly in game the add-ons of the collection in game by providing some details
+[x] Allows in some cases to provide a download link for the add-on
+[~] Allows to visualize directly in game the LUA and VMT code, the audio files and the textures.
+[ ] Clean and intuitive interface 
+[ ] Uses a regularly updated API to list known addons containing either a backdoor or an exploit.
+[ ] Advanced automatic analysis of the add-on
 
-![Alt text](https://i.imgur.com/gm6JnHw.png "img")
+**Legend:**
+[x] : Completed
+[~] : Partially finished
+[ ] : Not started
+
+### Installation:
+
+Warning: the add-on is not finished!
+
+Just like every add-on, you just have to extract and move the folder in garrysmod/addons and you're done. It's as simple as that 
+
+
+###Illustration :
+
+![image.png](https://i.imgur.com/pLnUnlY.png)
+
+![image.png](https://i.imgur.com/uRQF37Y.png)
+
+![image.png](https://i.imgur.com/RkbG0Fz.png)
+
+![image.png](https://i.imgur.com/EcRoPWU.png)
+
+![image.png](https://i.imgur.com/NFADtx4.png)
+
+
+![image.png](https://i.imgur.com/DtVT5qf.png)
+
+
+![image.png](https://i.imgur.com/9LZGAEx.png)
+
+![image.png](https://i.imgur.com/XWundjz.png)
+
+
