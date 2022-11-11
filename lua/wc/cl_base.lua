@@ -170,11 +170,12 @@ local function Show()
                             pathsNode[k] = arbo:AddNode(v, "icon16/link.png")
 
                             pathsNode[k].DoClick = function()
-                                if (string.GetExtensionFromFilename(v) == "lua") then
+                                if (string.GetExtensionFromFilename(v) == "lua" or string.GetExtensionFromFilename(v)  == "vmt") then
 
 
                                     local CodeWindow = vgui.Create( "DFrame" )
                                     CodeWindow:SetSize( ScrW() / 2.5, ScrH() / 2.5 )
+                                    CodeWindow:SetTitle(v)
                                     CodeWindow:ShowCloseButton(false)
                                     CodeWindow:Center()
                                     CodeWindow:MakePopup()
@@ -184,7 +185,6 @@ local function Show()
 
                                     local Code = vgui.Create( "DTextEntry", CodeWindow )
                                     Code:SetMultiline( true )
-
                                     Code:Dock( FILL )
                                     Code:SetText( file.Read( v, "GAME" )  )
 
@@ -197,11 +197,66 @@ local function Show()
                                         draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
                                     end
                                     CloseButton.DoClick = function()
-                                
                                         CodeWindow:Close()
                                     end
-                            
+                                else if (string.GetExtensionFromFilename(v) == "png" or string.GetExtensionFromFilename(v) == "jpg" or string.GetExtensionFromFilename(v) == "vtf") then
+                                    local ImageWindow = vgui.Create( "DFrame" )
+                                    ImageWindow:SetSize( ScrW() / 2.5, ScrH() / 2.5 )
+                                    ImageWindow:SetTitle(v)
+                                    ImageWindow:ShowCloseButton(false)
+                                    ImageWindow:Center()
+                                    ImageWindow:MakePopup()
+                                    ImageWindow.Paint = function(self, w, h)
+                                        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
+                                    end
 
+                                    local Image = vgui.Create( "DImage", ImageWindow )
+                                    Image:Dock(FILL)
+                                    
+                                    if (string.GetExtensionFromFilename(v) == "vtf") then
+                                        print(string.StripExtension(v))
+                                        Image:SetMaterial(string.StripExtension(v))
+                                    else
+                                        Image:SetImage(v)
+                                    end
+                                    
+
+
+                                    local CloseButton = vgui.Create("DButton", ImageWindow)
+                                    CloseButton:SetText("")
+                                    CloseButton:SetSize(20, 20)
+                                    CloseButton:SetPos(Main:GetWide() - 20, 0)
+
+                                    CloseButton.Paint = function(self, w, h)
+                                        draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
+                                    end
+                                    CloseButton.DoClick = function()
+                                        ImageWindow:Close()
+                                    end
+                                else if (string.GetExtensionFromFilename(v) == "mp3" or string.GetExtensionFromFilename(v) == "wav") then
+                                    local MusicWindow = vgui.Create( "DFrame" )
+                                    MusicWindow:SetSize( ScrW() / 2.5, ScrH() / 2.5 )
+                                    MusicWindow:SetTitle(v)
+                                    MusicWindow:ShowCloseButton(false)
+                                    MusicWindow:Center()
+                                    MusicWindow:MakePopup()
+                                    MusicWindow.Paint = function(self, w, h)
+                                        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 255))
+                                    end
+                                    local CloseButton = vgui.Create("DButton", MusicWindow)
+                                    CloseButton:SetText("")
+                                    CloseButton:SetSize(20, 20)
+                                    CloseButton:SetPos(MusicWindow:GetWide() - 20, 0)
+                                    CloseButton.Paint = function(self, w, h)
+                                        draw.RoundedBox(0, 0, 0, w, h, Color(255, 0, 0, 255))
+                                    end
+                                    CloseButton.DoClick = function()
+                                        MusicWindow:Close()
+                                    end
+                                else 
+                                    print("[WC] unknown format  ")
+                                end
+        
                                 end
                             end    
                         end
@@ -234,9 +289,8 @@ local function Show()
                                         notfound = false
                                     end                     
                                 end
-                            end
+                            end]]
                         end
-                        ]]
                     end
                 end)
 
