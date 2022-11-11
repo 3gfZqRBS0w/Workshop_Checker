@@ -6,14 +6,14 @@ Workshop Checker est une add-on Garry's Mod qui permet de vérifier le contenu d
 
 **Pour l'instant le script est en développement donc un peu de patience.**
 
-###Objectif :
+### Objectif :
 
-- [~] Fournit une analyse pour déterminer la confiance de l'add-on
+- [ ] Fournit une analyse pour déterminer la confiance de l'add-on
 - [x] Préviens lorsqu'un add-on de la collection vient d'être mis a jour
 - [x] Garde en mémoire les add-ons suspects et préviens lorsqu'il ont été soit supprimé soit masqué
 - [x] Permet de visualiser directement en jeu les addons de la collection en jeu en fournissant certain détail
 - [x] Permet dans certain cas de fournir un lien de téléchargement pour l'add-on
-- [~] Permet de visualiser directement en jeu le code LUA et VMT , les fichiers audios et les textures.
+- [ ] Permet de visualiser directement en jeu le code LUA et VMT , les fichiers audios et les textures.
 - [ ] Interface propre et intuitive 
 - [ ] Utilise une API mis a jour régulièrement permettant de lister les addons connu contenant soit une backdoor ou un exploit.
 - [ ] Analyse automatique appronfondie de l'add-on
