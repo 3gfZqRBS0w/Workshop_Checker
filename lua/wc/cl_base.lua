@@ -225,15 +225,24 @@ local function Show()
                                                     ModelWindow:Close()
                                                 end
 
-                                                local icon = vgui.Create("DModelPanel", ModelWindow)
+                                                util.PrecacheModel( v )
+
+                                                local icon = vgui.Create( "SpawnIcon" , ModelWindow ) -- SpawnIcon, with blue barrel model
                                                 icon:Dock(FILL)
-                                                icon:SetModel(v) -- you can only change colors on playermodels
-                                                function icon:LayoutEntity(Entity)
-                                                    return
-                                                end -- disables default rotation
-                                                function icon.Entity:GetPlayerColor()
-                                                    return Vector(1, 0, 0)
+                                                icon:SetModel( v, 0 )
+                                                icon.DoClick = function()
+
+                                                    ModelWindow:SetScreenLock( false )
+                                                    local trace = LocalPlayer():GetEyeTrace()
+                                                    entity = ClientsideModel( v )
+                                                    entity:SetPos( trace.HitPos + trace.HitNormal * 24 )
+                                                    entity:Spawn()
                                                 end
+
+                                                ModelWindow.OnClose = function()
+                                                    entity:Remove()
+                                                end
+                                
                                             else
                                                 if
                                                     (string.GetExtensionFromFilename(v) == "mp3" or
@@ -390,6 +399,10 @@ local function Show()
                         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 250))
                     end
                 end
+            else
+                local check = addon[k]:Add("File too big to be seen")
+                check:SetTextColor(Color(255, 255, 255))
+
             end
             local analyse =
                 addon[k]:Add(
